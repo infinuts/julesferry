@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>لعبة الهمزة</title>
+<style>
+    body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e7eff6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .container {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 300px;
+    transition: background-color 0.3s;
+  }
+  .word {
+    font-size: 24px;
+    margin: 20px;
+    color: #333;
+  }
+  button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #45a049;
+  }
+  .result {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #888;
+  }
+  .score {
+    margin-top: 20px;
+    font-size: 20px;
+    color: green;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div id="wordDisplay" class="word"></div>
+  <button onClick="checkAnswer('ء')">ء</button>
+  <button onClick="checkAnswer('ؤ')">ؤ</button>
+  <button onClick="checkAnswer('ئ')">ئ</button>
+  <div id="result" class="result"></div>
+  <div id="score" class="score">Score: 0</div>
+</div>
+<script>
+const words = [
+  {"word": "هَيْءة", "correct": "ئ"},
+  {"word": "مءمن", "correct": "ؤ"},
+  {"word": "تَفاءل", "correct": "ء"},
+  {"word": "تَبَوُّء", "correct": "ء"},
+  {"word": "شاطِء", "correct": "ئ"},
+  {"word": "سءم", "correct": "ئ"},
+  {"word": "شَءن", "correct": "أ"},
+  {"word": " فَءس", "correct": "أ"},
+  {"word": "بِءر", "correct": "ئ"},
+  {"word": "كَءس", "correct": "أ"},
+  {"word": "مءتمر", "correct": "ؤ"},
+  {"word": "رءة", "correct": "ئ"},
+  {"word": " فءران", "correct": "ئ"},
+  {"word": "مءة", "correct": "ئ"},
+  {"word": "ذءب", "correct": "ئ"},
+  {"word": "تءمل", "correct": "أ"},
+  {"word": "مءلم", "correct": "ؤ"},
+  // Add up to 100 words with similar structure
+];
+let currentWord = 0;
+let progress = JSON.parse(localStorage.getItem('progress')) || [];
+let score = 0;
+
+function displayWord() {
+  document.getElementById('wordDisplay').textContent = words[currentWord].word.replace(/ء|ؤ|ئ/g, '_');
+  document.getElementById('result').textContent = '';
+}
+
+function checkAnswer(answer) {
+  if (answer === words[currentWord].correct) {
+    document.getElementById('result').textContent = 'صحيح';
+    updateProgress(true);
+    score++;
+    document.getElementById('score').textContent = 'Score: ' + score;
+  } else {
+    alert('خطأ');
+    updateProgress(false);
+  }
+  if (currentWord < words.length - 1) {
+    currentWord++;
+    displayWord();
+  } else {
+    alert('تم الانتهاء من جميع الكلمات!');
+  }
+}
+
+function updateProgress(correct) {
+  progress.push({word: words[currentWord].word, correct: correct});
+  localStorage.setItem('progress', JSON.stringify(progress));
+}
+
+window.onload = function() {
+  displayWord();
+};
+</script>
+</body>
+</html>
